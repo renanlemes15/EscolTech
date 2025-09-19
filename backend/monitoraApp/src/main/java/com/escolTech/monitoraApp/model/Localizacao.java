@@ -1,4 +1,4 @@
-package br.com.escolterick.escolta_api.model;
+package com.escolTech.monitoraApp.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

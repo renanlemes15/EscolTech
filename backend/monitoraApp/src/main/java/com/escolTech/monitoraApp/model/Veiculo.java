@@ -1,5 +1,5 @@
-// src/main/java/br/com/suaempresa/escoltaapi/model/Veiculo.java
-package br.com.escolterick.escolta_api.model;
+
+package com.escolTech.monitoraApp.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
