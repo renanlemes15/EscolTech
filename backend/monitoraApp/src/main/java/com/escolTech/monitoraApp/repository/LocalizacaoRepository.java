@@ -1,6 +1,6 @@
-package br.com.escolterick.escolta_api.repository;
+package com.escolTech.monitoraApp.repository;
 
-import br.com.escolterick.escolta_api.model.Localizacao;
+import com.escolTech.monitoraApp.model.Localizacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List; // Importe a classe List
