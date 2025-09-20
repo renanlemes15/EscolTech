@@ -1,4 +1,4 @@
-package br.com.escolterick.escolta_api.dto;
+package com.escolTech.monitoraApp.dto;
 
 public record AuthRequest(String deviceId, String secretKey) {
     

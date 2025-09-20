@@ -1,9 +1,9 @@
-package br.com.escolterick.escolta_api.controller;
+package com.escolTech.monitoraApp.controller;
 
 // IMPORTS ADICIONADOS
-import br.com.escolterick.escolta_api.dto.AuthRequest;
-import br.com.escolterick.escolta_api.dto.AuthResponse;
-import br.com.escolterick.escolta_api.security.JwtService;
+import com.escolTech.monitoraApp.dto.AuthRequest;
+import com.escolTech.monitoraApp.dto.AuthResponse;
+import com.escolTech.monitoraApp.security.JwtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

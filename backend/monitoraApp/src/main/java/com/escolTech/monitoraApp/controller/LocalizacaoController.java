@@ -1,10 +1,10 @@
 // src/main/java/br/com/suaempresa/escoltaapi/controller/LocalizacaoController.java
-package br.com.escolterick.escolta_api.controller;
+package com.escolTech.monitoraApp.controller;
 // src/main/java/br/com/suaempresa/escoltaapi/controller/LocalizacaoController.java
 
-import br.com.escolterick.escolta_api.dto.LocalizacaoRequestDTO;
-import br.com.escolterick.escolta_api.model.Localizacao;
-import br.com.escolterick.escolta_api.service.LocalizacaoService;
+import com.escolTech.monitoraApp.dto.LocalizacaoRequestDTO;
+import com.escolTech.monitoraApp.model.Localizacao;
+import com.escolTech.monitoraApp.service.LocalizacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

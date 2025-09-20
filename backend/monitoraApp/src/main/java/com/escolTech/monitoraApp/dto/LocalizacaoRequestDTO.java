@@ -1,5 +1,5 @@
 // src/main/java/br/com/suaempresa/escoltaapi/dto/LocalizacaoRequestDTO.java
-package br.com.escolterick.escolta_api.dto;
+package com.escolTech.monitoraApp.dto;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package br.com.escolterick.escolta_api.dto;
+package com.escolTech.monitoraApp.dto;
 
 public record AuthResponse(String token) {
     
