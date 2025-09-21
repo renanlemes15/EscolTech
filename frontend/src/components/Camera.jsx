@@ -36,10 +36,11 @@ const Camera = ({ setCamOpen }) => {
         ref={videoRef}
         autoPlay
         playsInline
-        style={{ width: "100%", height: "500px", borderRadius: "8px", background: "#000" }}
+        style={{ width: "100%", height: "400px", borderRadius: "8px", background: "#000" }}
       />
     </div>
   );
 };
 
 export default Camera;
+
