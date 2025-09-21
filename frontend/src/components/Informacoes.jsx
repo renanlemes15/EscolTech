@@ -6,6 +6,7 @@ const Container = styled.div`
   justify-content: space-around;
   flex-wrap: wrap;
   margin-top: 20px;
+  gap: 20px;
 `;
 
 const Item = styled.div`
