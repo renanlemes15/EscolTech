@@ -6,7 +6,6 @@ import Mapa from "../components/Mapa";
 import Microfone from "../components/Microfone";
 import Informacoes from "../components/Informacoes";
 
-// ---------- ESTILOS ----------
 const Container = styled.div`
   background-color: #0a1a2b;
   color: white;
@@ -39,14 +38,18 @@ const BlinkingTitle = styled.div`
 const MainArea = styled.div`
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
   flex-wrap: wrap;
+  margin-bottom: 40px;
 `;
 
 const Column = styled.div`
   flex: 1;
   min-width: 350px;
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const Overlay = styled.div`
@@ -59,7 +62,7 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 1000;
 `;
 
 const Content = styled.div`
@@ -115,7 +118,7 @@ const GerenciamentoAlerta = () => {
     <Container>
       <HeaderContainer>
         <FaExclamationTriangle />
-        <BlinkingTitle active={alertaAtivo}>Gerenciamento de Alerta</BlinkingTitle>
+        <BlinkingTitle active={alertaAtivo}>PÂNICO</BlinkingTitle>
         <FaExclamationTriangle />
       </HeaderContainer>
 
