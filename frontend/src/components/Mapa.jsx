@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-const MapaLeaflet = ({ alerta }) => {
+const Mapa = ({ alerta }) => {
   const center = [-25.0913, -50.1626];
 
   return (
@@ -29,4 +29,4 @@ const MapaLeaflet = ({ alerta }) => {
   );
 };
 
-export default MapaLeaflet;
+export default Mapa;
