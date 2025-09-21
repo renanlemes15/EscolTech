@@ -1,30 +1,32 @@
 import React from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-const containerStyle = {
-  width: "100%",
-  height: "400px",
-};
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
 
-const Mapa = ({ alerta }) => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "SUA_CHAVE_API_GOOGLE_MAPS", // 🔑 INSERIR A CHAVE API
-  });
+const MapaLeaflet = ({ alerta }) => {
+  const center = [-25.0913, -50.1626];
 
-  const center = { lat: -25.0913, lng: -50.1626 }; // Centraliza em Ponta Grossa - PR
-
-  return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={13}>
+  return (
+    <MapContainer center={center} zoom={13} style={{ width: "100%", height: "400px" }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="&copy; OpenStreetMap contributors"
+      />
       {alerta && (
-        <Marker
-          position={{ lat: alerta.latitude, lng: alerta.longitude }}
-          title="Local do alerta"
-        />
+        <Marker position={[alerta.latitude, alerta.longitude]}>
+          <Popup>Local do alerta</Popup>
+        </Marker>
       )}
-    </GoogleMap>
-  ) : (
-    <div>Carregando mapa...</div>
+    </MapContainer>
   );
 };
 
-export default Mapa;
+export default MapaLeaflet;
