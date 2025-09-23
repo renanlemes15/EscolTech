@@ -114,7 +114,7 @@ const Microfone = () => {
         className={`botao-microfone ${gravando ? "gravando" : ""}`} 
         onClick={gravando ? pararGravacao : iniciarGravacao}
       >
-        {gravando ? "⏹️ Parar Gravação" : "🎤 Ativar Microfone"}
+        {gravando ? "⏹️ Desativar Microfone" : "🎤 Ativar Microfone"}
       </button>
     </div>
   );
