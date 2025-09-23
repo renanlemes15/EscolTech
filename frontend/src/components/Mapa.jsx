@@ -12,14 +12,22 @@ L.Icon.Default.mergeOptions({
 });
 
 const Mapa = ({ alerta }) => {
-  const center = [-25.0913, -50.1626];
+  // Coordenadas ajustadas para o estacionamento em frente à Central de Salas
+  const center = [-25.09368, -50.10424]; 
 
   return (
-    <MapContainer center={center} zoom={13} style={{ width: "100%", height: "400px" }}>
+    <MapContainer center={center} zoom={18} style={{ width: "100%", height: "400px" }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
+      
+      {/* Marcador indicando o ponto de encontro/estacionamento */}
+      <Marker position={center}>
+        <Popup>Ponto de encontro | Estacionamento</Popup>
+      </Marker>
+
+      {/* Marcador do alerta, se houver */}
       {alerta && (
         <Marker position={[alerta.latitude, alerta.longitude]}>
           <Popup>Local do alerta</Popup>
