@@ -26,6 +26,7 @@ const Informacoes = ({ info, onInfoClick }) => {
   return (
     <InfoContainer>
       {info.map((item) => {
+        // A alteração foi feita aqui, removendo "destino" do array
         const clickable = ["motorista", "veiculo", "cliente"].includes(item.type) && item.label !== "Placa";
         return (
           <InfoCard

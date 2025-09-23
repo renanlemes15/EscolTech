@@ -1,54 +1,60 @@
 import React, { useRef, useState, useEffect } from "react";
-import styled, { keyframes, css } from "styled-components";
-
-const pulse = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-`;
-
-const MicrofoneWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  margin-top: 20px;
-`;
-
-const BotaoMicrofone = styled.button`
-  background-color: ${(props) => (props.gravando ? "#ff6b6b" : "#1f3b5a")};
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 50px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.1s ease;
-
-  ${(props) =>
-    props.gravando &&
-    css`
-      animation: ${pulse} 1s infinite;
-    `};
-
-  &:hover {
-    background-color: ${(props) => (props.gravando ? "#ff5252" : "#2a4a6f")};
-    transform: scale(1.05);
-  }
-`;
-
-const AudioPlayer = styled.audio`
-  width: 100%;
-  max-width: 350px;
-  border-radius: 8px;
-  outline: none;
-`;
 
 const Microfone = () => {
   const [gravando, setGravando] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
-  const audioRef = useRef(null);
+
+  // Injeta os estilos na cabeça do documento para evitar a dependência de styled-components
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+
+      .microfone-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        margin-top: 20px;
+      }
+
+      .botao-microfone {
+        background-color: #1f3b5a;
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.1s ease;
+      }
+
+      .botao-microfone:hover {
+        background-color: #2a4a6f;
+        transform: scale(1.05);
+      }
+
+      .botao-microfone.gravando {
+        background-color: #ff6b6b;
+        animation: pulse 1s infinite;
+      }
+      
+      .botao-microfone.gravando:hover {
+        background-color: #ff5252;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Função de limpeza para remover o estilo quando o componente é desmontado
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []); // O array de dependências vazio garante que isso seja executado apenas uma vez
 
   const iniciarGravacao = async () => {
     try {
@@ -102,23 +108,17 @@ const Microfone = () => {
     }
   };
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = "http://localhost:8080/api/audio/stream";
-      audioRef.current
-        .play()
-        .catch((e) => console.error("Erro no áudio remoto:", e));
-    }
-  }, []);
-
   return (
-    <MicrofoneWrapper>
-      <BotaoMicrofone gravando={gravando} onClick={gravando ? pararGravacao : iniciarGravacao}>
+    <div className="microfone-wrapper">
+      <button 
+        className={`botao-microfone ${gravando ? "gravando" : ""}`} 
+        onClick={gravando ? pararGravacao : iniciarGravacao}
+      >
         {gravando ? "⏹️ Parar Gravação" : "🎤 Ativar Microfone"}
-      </BotaoMicrofone>
-      <AudioPlayer ref={audioRef} controls />
-    </MicrofoneWrapper>
+      </button>
+    </div>
   );
 };
 
 export default Microfone;
+
