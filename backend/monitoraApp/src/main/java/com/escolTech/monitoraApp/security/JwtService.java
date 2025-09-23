@@ -1,5 +1,5 @@
 // src/main/java/br/com/suaempresa/escoltaapi/security/JwtService.java
-package br.com.escolterick.escolta_api.security;
+package com.escolTech.monitoraApp.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

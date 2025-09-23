@@ -1,8 +1,8 @@
-package br.com.escolterick.escolta_api.service;
+package com.escolTech.monitoraApp.service;
 
-import br.com.escolterick.escolta_api.dto.VeiculoRequestDTO;
-import br.com.escolterick.escolta_api.model.Veiculo;
-import br.com.escolterick.escolta_api.repository.VeiculoRepository;
+import com.escolTech.monitoraApp.dto.VeiculoRequestDTO;
+import com.escolTech.monitoraApp.model.Veiculo;
+import com.escolTech.monitoraApp.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

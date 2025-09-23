@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitoramento em Tempo Real</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.animatedmarker@1.0.0/src/AnimatedMarker.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.js"></script>
+
+    <style>
+        body { font-family: sans-serif; margin: 0; }
+        #map { height: 100vh; width: 100%; }
+        #info { position: absolute; top: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 5px; border: 1px solid #ccc; max-width: 300px; }
+        /* Esconde o painel de direções padrão do plugin */
+        .leaflet-routing-container { display: none; } 
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+    <div id="info">
+        <strong>Última Localização Recebida:</strong>
+        <pre id="latest-data">Aguardando dados...</pre>
+    </div>
+
+    <script>
+        let map;
+        let vehicleMarkers = {};
+
+        // VAMOS GUARDAR O HISTÓRICO E O CONTROLE DE ROTA DE CADA VEÍCULO
+        let vehiclePaths = {}; 
+        let vehicleRoutingControls = {}; 
+
+        function initMap() {
+            map = L.map('map').setView([-24.25, -50.5], 7); // Zoom mais afastado para ver a viagem
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        function updateMap(location) {
+            const vehicleId = location.veiculo.id;
+            const lat = location.latitude;
+            const lon = location.longitude;
+            const newLatLng = L.latLng(lat, lon); // O plugin prefere o formato L.latLng
+
+            document.getElementById('latest-data').innerText = JSON.stringify(location, null, 2);
+
+            if (!vehiclePaths[vehicleId]) {
+                vehiclePaths[vehicleId] = [];
+            }
+            vehiclePaths[vehicleId].push(newLatLng);
+
+            // Se já temos mais de um ponto, podemos criar ou atualizar a rota
+            if (vehiclePaths[vehicleId].length > 1) {
+                // Remove a rota antiga, se existir
+                if (vehicleRoutingControls[vehicleId]) {
+                    map.removeControl(vehicleRoutingControls[vehicleId]);
+                }
+
+                // Cria um novo controle de rota com todos os pontos do histórico
+                const routingControl = L.Routing.control({
+                    waypoints: vehiclePaths[vehicleId],
+                    routeWhileDragging: false,
+                    addWaypoints: false, // Não permite adicionar pontos clicando no mapa
+                    createMarker: function() { return null; } // Não cria os marcadores padrão A e B
+                }).addTo(map);
+
+                vehicleRoutingControls[vehicleId] = routingControl;
+            }
+
+            // A lógica do marcador animado continua a mesma
+            if (vehicleMarkers[vehicleId]) {
+                vehicleMarkers[vehicleId].slideTo(newLatLng, { duration: 4000 });
+            } else {
+                let newMarker = L.animatedMarker([newLatLng], { autoStart: true }).addTo(map);
+                vehicleMarkers[vehicleId] = newMarker;
+            }
+
+            map.panTo(newLatLng);
+        }
+
+        function connect() {
+            const socket = new SockJS('/ws');
+            const stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                console.log('Conectado ao WebSocket: ' + frame);
+                stompClient.subscribe('/topic/localizacoes', function (message) {
+                    const locationData = JSON.parse(message.body);
+                    updateMap(locationData);
+                });
+            });
+        }
+
+        initMap();
+        connect();
+    </script>
+
+</body>
+</html>

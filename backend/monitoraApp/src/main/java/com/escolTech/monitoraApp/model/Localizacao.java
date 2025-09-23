@@ -1,29 +1,27 @@
 package com.escolTech.monitoraApp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
-import lombok.Data;
 
 @Entity
-@Data
+@Table(name = "localizacao")
+@Getter
+@Setter
 public class Localizacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // Muitas localizações para UM veículo
+    @ManyToOne
     @JoinColumn(name = "veiculo_id", nullable = false)
     private Veiculo veiculo;
 
-    @Column(nullable = false)
     private Double latitude;
-
-    @Column(nullable = false)
     private Double longitude;
-
     private Double velocidade;
-    
-    @Column(nullable = false)
     private LocalDateTime timestamp;
 }
