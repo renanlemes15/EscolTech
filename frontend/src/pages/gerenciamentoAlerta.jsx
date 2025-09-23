@@ -1,5 +1,4 @@
-// GerenciamentoAlerta.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 import { FaExclamationTriangle } from "react-icons/fa";
 import Camera from "../components/Camera";
@@ -89,6 +88,7 @@ const GerenciamentoAlerta = () => {
   const [modalData, setModalData] = useState(null);
   const [camOpen, setCamOpen] = useState(false);
   const [info, setInfo] = useState([]);
+  const mapaRef = useRef(); // ref para centralizar mapa
 
   useEffect(() => {
     const timer = setTimeout(() => setAlertaAtivo(true), 5000);
@@ -110,8 +110,6 @@ const GerenciamentoAlerta = () => {
         ])
       );
   }, []);
-
-  const center = { lat: -25.0913, lng: -50.1626 };
 
   const getDetalhes = (type) => {
     switch(type) {
@@ -149,6 +147,10 @@ const GerenciamentoAlerta = () => {
   };
 
   const handleInfoClick = (item) => {
+    if(item.type === "destino" && mapaRef.current) {
+      mapaRef.current.centralizarDestino();
+      return;
+    }
     const detalhes = getDetalhes(item.type);
     if(detalhes) setModalData({ title: item.label, details: detalhes });
   };
@@ -167,7 +169,7 @@ const GerenciamentoAlerta = () => {
           <Microfone />
         </Column>
         <Column>
-          <Mapa alerta={{ latitude: center.lat, longitude: center.lng }} />
+          <Mapa ref={mapaRef} alerta={null} />
         </Column>
       </MainArea>
 
