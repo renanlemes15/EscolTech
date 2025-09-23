@@ -88,31 +88,51 @@ const GerenciamentoAlerta = () => {
   const [mapOpen, setMapOpen] = useState(false);
   const [camOpen, setCamOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
+  const [modalData, setModalData] = useState(null);
   const [info, setInfo] = useState([]);
+  const [rota, setRota] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setAlertaAtivo(true), 5000);
     return () => clearTimeout(timer);
   }, []);
 
+  // Buscar informações do backend
   useEffect(() => {
-    fetch("http://localhost:8080/api/alert/info")
+    fetch("http://localhost:8080/viagens/1") // Ajuste o ID da viagem conforme necessário
       .then((res) => res.json())
-      .then((data) => setInfo(data))
-      .catch(() =>
-        setInfo([
-          { label: "Motorista", value: "João Silva", type: "motorista" },
-          { label: "Placa", value: "ABC-1234", type: "veiculo" },
-          { label: "Veículo", value: "Caminhão 3/4", type: "veiculo" },
-          { label: "Carga", value: "Eletrônicos", type: "carga" },
-          { label: "Cliente", value: "Empresa XYZ", type: "cliente" },
-          { label: "Destino", value: "Rua Exemplo, 123", type: "destino" },
-        ])
-      );
+      .then((data) => {
+        const infoFormatada = [
+          { label: "Motorista", value: data.motorista.nome, type: "motorista", id: data.motorista.id },
+          { label: "Placa", value: data.veiculo.placa, type: "veiculo" },
+          { label: "Veículo", value: data.veiculo.modelo, type: "veiculo", id: data.veiculo.id },
+          { label: "Carga", value: data.carga, type: "carga" },
+          { label: "Cliente", value: data.cliente.nome, type: "cliente", id: data.cliente.id },
+          { label: "Destino", value: data.destino, type: "destino", coordinates: data.destinoCoordenadas },
+        ];
+        setInfo(infoFormatada);
+        // Começar a rota
+        if(data.motorista.latitude && data.motorista.longitude){
+          setRota([{ lat: data.motorista.latitude, lng: data.motorista.longitude }, data.destinoCoordenadas]);
+        }
+      })
+      .catch(() => console.log("Erro ao buscar informações do backend"));
   }, []);
 
-  // Coordenadas Ponta Grossa
-  const center = { lat: -25.0913, lng: -50.1626 };
+  // Função pra abrir modal com info detalhada
+  const handleInfoClick = (item) => {
+    if (!["motorista", "veiculo", "cliente", "destino"].includes(item.type)) return;
+
+    fetch(`http://localhost:8080/${item.type}s/${item.id}`)
+      .then(res => res.json())
+      .then(data => setModalData(data))
+      .catch(() => setModalData({ info: "Erro ao carregar dados" }));
+
+    setModalType(item.type);
+  };
+
+  // Coordenadas Ponta Grossa como default
+  const center = rota.length ? rota[0] : { lat: -25.0913, lng: -50.1626 };
 
   return (
     <Container>
@@ -128,16 +148,16 @@ const GerenciamentoAlerta = () => {
           <Microfone />
         </Column>
         <Column>
-          <Mapa alerta={{ latitude: center.lat, longitude: center.lng }} />
+          <Mapa alerta={center} rota={rota} />
         </Column>
       </MainArea>
 
-      <Informacoes info={info} onInfoClick={setModalType} />
+      <Informacoes info={info} onInfoClick={handleInfoClick} />
 
       {modalType && (
-        <Modal onClose={() => setModalType(null)}>
-          <h2>Detalhes: {modalType}</h2>
-          <p>Informações adicionais carregadas do backend.</p>
+        <Modal onClose={() => { setModalType(null); setModalData(null); }}>
+          <h2>{modalType.charAt(0).toUpperCase() + modalType.slice(1)}</h2>
+          <pre>{modalData ? JSON.stringify(modalData, null, 2) : "Carregando..."}</pre>
         </Modal>
       )}
 
@@ -149,7 +169,7 @@ const GerenciamentoAlerta = () => {
 
       {mapOpen && (
         <Modal onClose={() => setMapOpen(false)}>
-          <Mapa alerta={{ latitude: center.lat, longitude: center.lng }} />
+          <Mapa alerta={center} rota={rota} />
         </Modal>
       )}
     </Container>
