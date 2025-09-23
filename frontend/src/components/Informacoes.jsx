@@ -1,39 +1,44 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-const Container = styled.div`
+const InfoContainer = styled.div`
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
-  margin-top: 20px;
-  gap: 20px;
+  gap: 15px;
 `;
 
-const Item = styled.div`
-  cursor: pointer;
-  background-color: #142c44;
-  padding: 12px 16px;
+const InfoCard = styled.div`
+  background-color: #1f3b5c;
+  padding: 15px;
   border-radius: 8px;
-  min-width: 120px;
-  text-align: center;
-  transition: background 0.3s ease;
+  flex: 1;
+  min-width: 150px;
+  cursor: ${(props) => (props.clickable ? "pointer" : "default")};
+  opacity: ${(props) => (props.clickable ? 1 : 0.7)};
+  transition: all 0.2s;
 
   &:hover {
-    background-color: #1f3b5a;
+    background-color: ${(props) => (props.clickable ? "#2a4d78" : "#1f3b5c")};
   }
 `;
 
-function Informacoes({ info, onInfoClick }) {
+const Informacoes = ({ info, onInfoClick }) => {
   return (
-    <Container>
-           {info.map((item, i) => (
-        <Item key={i} onClick={() => onInfoClick(item.type)}>
-          <strong>{item.label}:</strong> {item.value}
-        </Item>
-      ))}
-    </Container>
+    <InfoContainer>
+      {info.map((item) => {
+        const clickable = ["motorista", "veiculo", "cliente"].includes(item.type) && item.label !== "Placa";
+        return (
+          <InfoCard
+            key={item.label}
+            clickable={clickable}
+            onClick={() => clickable && onInfoClick(item)}
+          >
+            <strong>{item.label}:</strong> {item.value}
+          </InfoCard>
+        );
+      })}
+    </InfoContainer>
   );
-}
+};
 
 export default Informacoes;
-
