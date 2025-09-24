@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0a1a2b;
+  color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00d1b2;
+  text-shadow: 1px 1px 3px #000;
+}
+
+.entregas-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.entregas-table th,
+.entregas-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.entregas-table th {
+  background-color: #1f2a3a;
+  color: #00d1b2;
+}
+
+.entregas-table tr {
+  background-color: #162030;
+  transition: all 0.3s ease;
+}
+
+.entregas-table tr:hover {
+  background-color: #1b2d44;
+}
+
+.status-emrota td:last-child {
+  color: #00ff9d;
+  font-weight: bold;
+}
+
+.status-pendente td:last-child {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.status-concluida td:last-child {
+  color: #00bfff;
+  font-weight: bold;
+}
