@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // e funciona corretamente com as configurações padrão de credenciais do SockJS.
         // E especificamos a origem correta do seu frontend: http://localhost:3001
         registry.addEndpoint("/ws-monitor")
-                .setAllowedOriginPatterns("http://localhost:3001") 
+                .setAllowedOriginPatterns("*") 
                 .withSockJS();
     }
 }
