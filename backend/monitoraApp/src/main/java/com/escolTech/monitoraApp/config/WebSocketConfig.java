@@ -18,9 +18,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // A SOLUÇÃO FINAL:
+        // Usamos .setAllowedOriginPatterns() que é mais flexível e seguro que .setAllowedOrigins()
+        // e funciona corretamente com as configurações padrão de credenciais do SockJS.
+        // E especificamos a origem correta do seu frontend: http://localhost:3001
         registry.addEndpoint("/ws-monitor")
-                // ALTERAÇÃO: Agora aceita qualquer origem (qualquer porta/domínio).
-                .setAllowedOrigins("*")
+                .setAllowedOriginPatterns("http://localhost:3001") 
                 .withSockJS();
     }
 }
